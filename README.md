@@ -58,11 +58,39 @@
 | Setting | Description |
 | --- | --- |
 | **Bot Token** | Create a bot with [@BotFather](https://t.me/BotFather) and paste the token. |
-| **Chat ID** | The target chat, group or channel ID (for example `-1001234567890`). Add the bot to the group or channel first. [@get_id_bot](https://t.me/get_id_bot) can tell you the ID. |
+| **Chat ID** | The target chat, group or channel ID (for example `-1001234567890`). See [Finding your Chat ID](#finding-your-chat-id). |
 | **Notify on …** | Turn each event type on or off. |
 | **Include Reply Content** | Off by default. Adds the first 500 characters of client ticket replies. |
 
 To see delivery results under **Addons → Telegram Notifications**, enable **Configuration → System Logs → Module Log**.
+
+### Finding your Chat ID
+
+**Private chat (your own account)**
+
+1. Open [@userinfobot](https://t.me/userinfobot) or [@getidsbot](https://t.me/getidsbot) in Telegram and send `/start`.
+2. The bot replies with your ID, for example `Id: 123456789`.
+3. Open **your own bot** and send `/start` once. Bots cannot message users who haven't started a chat with them.
+
+**Group or channel (recommended for teams)**
+
+1. Add your bot to the group. For a channel, add the bot as an **administrator**.
+2. Post any message in the group or channel, for example `test`.
+3. Open this URL in your browser, replacing `<TOKEN>` with your bot token:
+   ```
+   https://api.telegram.org/bot<TOKEN>/getUpdates
+   ```
+4. Find `"chat":{"id":-1001234567890, ...}` in the response. For channels it is under `channel_post`. That number is your Chat ID.
+
+**Tips**
+
+- Group and channel IDs are **negative** and usually start with `-100`. Include the minus sign.
+- If `getUpdates` returns an empty list (`[]`), post a new message and refresh the page.
+- If the bot doesn't see group messages, either disable privacy mode with `/setprivacy` in [@BotFather](https://t.me/BotFather) or make the bot a group admin.
+- If a webhook is set on the bot, `getUpdates` won't return anything. Remove the webhook with `https://api.telegram.org/bot<TOKEN>/deleteWebhook`, or use the private-chat method.
+- Keep your token secret. Clear the URL from your browser history afterwards.
+
+After saving the Chat ID, create a test client or ticket to confirm that notifications arrive.
 
 ### Ignoring automated tickets
 
@@ -87,6 +115,16 @@ Read [CHANGELOG.md](CHANGELOG.md) for the full list of changes and the reason fo
 WHMCS 9 ve PHP 8.2+ için güncellenmiş, güvenliği güçlendirilmiş Telegram bildirim modülü. Yeni müşteri, ödenen fatura, açılan ticket ve ticket yanıtı için bildirim gönderir.
 
 **Kurulum:** `modules` klasörünü WHMCS ana dizinine yükleyin. Ardından **Addon Modules** ekranından modülü etkinleştirip Bot Token ve Chat ID bilgilerini girin.
+
+**Chat ID nasıl bulunur?**
+
+- **Kendi hesabınız için:** [@userinfobot](https://t.me/userinfobot) botuna `/start` yazın. Size gönderdiği numara Chat ID'niz. Ayrıca kendi botunuza bir kez `/start` yazmanız gerekir.
+- **Grup veya kanal için:**
+  1. Botu gruba ekleyin. Kanal kullanıyorsanız botu kanalda yönetici yapın.
+  2. Grupta ya da kanalda bir mesaj yazın.
+  3. Tarayıcıda `https://api.telegram.org/bot<TOKEN>/getUpdates` adresini açın.
+  4. Yanıttaki `"chat":{"id": ...}` değeri Chat ID'nizdir. Bu değer genelde `-100` ile başlar; eksi işaretini de yazın.
+- **`getUpdates` boş dönerse:** Yeni bir mesaj yazıp sayfayı yenileyin. Yine boşsa BotFather'da `/setprivacy` ayarını **Disable** yapın.
 
 Sürüm 2.0.0'daki değişiklikler:
 
