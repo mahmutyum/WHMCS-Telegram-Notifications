@@ -6,17 +6,19 @@
     "category": "notifications",
     "description": {
         "name": "Telegram Notifications",
-        "tagline": "Secure, real-time Telegram notifications for WHMCS events.",
-        "long": "Telegram Notifications sends real-time alerts to a Telegram chat, group or channel when clients register, invoices are paid and support tickets are opened or replied to. Version 2 is hardened for WHMCS 9 and PHP 8.2+: client input is escaped, sensitive ticket content is opt-in, link previews are disabled and Telegram outages can never block checkout or payment callbacks.",
+        "tagline": "Secure, real-time Telegram alerts for WHMCS: sales, support, security and provisioning events.",
+        "long": "Telegram Notifications sends real-time alerts to a Telegram chat, group or channel for sales, support, security and provisioning events in WHMCS. Security alerts (admin logins, failed login attempts, account changes and fraud orders) can be routed to a separate chat. Hardened for WHMCS 9 and PHP 8.2+: client input is escaped, sensitive content is opt-in and Telegram outages never block checkout or payment callbacks.",
         "features": [
-            "Notifications for new client registrations.",
-            "Notifications when an invoice is paid.",
-            "Notifications when a support ticket is opened (including guest tickets).",
-            "Notifications when a client replies to a support ticket, with optional reply preview.",
-            "HTML-escaped messages that block link and markup injection.",
+            "Sales: new orders, paid invoices, refunds and cancellation requests.",
+            "Support: new tickets (including guests) and client replies with optional preview.",
+            "Security: admin logins with trusted IP\/CIDR allow-list and failed admin login summaries.",
+            "Security: client and user email or password changes, with who made the change.",
+            "Security: orders flagged by the fraud check.",
+            "Operations: failed service provisioning and domain registration, renewal or transfer.",
+            "Optional separate Security Chat ID for security alerts.",
+            "HTML-escaped messages, opt-in sensitive content, no link previews, masked bot token.",
             "Non-blocking delivery with strict timeouts and error isolation.",
-            "Built-in log viewer showing delivery status for each notification.",
-            "Supports custom admin folder names."
+            "Built-in log viewer with delivery status and custom admin folder support."
         ]
     },
     "logo": {

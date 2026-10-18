@@ -2,6 +2,52 @@
 
 All notable changes to this project are documented here. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project uses [Semantic Versioning](https://semver.org/).
 
+## [2.1.0] - 2026-10-18
+
+Adds security, sales and operations notifications. All new notifications are **off by default**, so upgrading changes nothing until you enable them.
+
+### Added: security notifications
+
+| Notification | Source | Why |
+| --- | --- | --- |
+| **Admin login** with username, IP, browser and time | `AdminLogin` hook | A stolen admin account is the biggest risk for a WHMCS install. An instant alert lets you react within minutes. |
+| **Trusted Admin IPs** (IPv4/IPv6, CIDR) | New setting | Logins from your office or VPN would otherwise flood the chat, and real alerts would get ignored. |
+| **Failed admin login summary**, grouped by IP with the usernames tried | `AfterCronJob` + Activity Log | Shows brute-force attempts early. WHMCS has no failed-login hook, so new Activity Log entries are read after each cron run. A checkpoint is stored in `tblconfiguration`, so each attempt is reported once and history is never replayed. |
+| **Client email changed**, **user login email changed**, **user password changed**, with who made the change (admin or client area, with IP) | `ClientEdit`, `UserEdit`, `UserChangePassword` | Changing the email is usually the first step of an account takeover. Passwords are never included. |
+| **Order flagged as fraud** | `AfterFraudCheck` (only when `isfraud` is true) | `FraudOrder` only runs when an admin marks an order manually. `AfterFraudCheck` catches what the fraud module detects. |
+| **Security Chat ID** | New setting | Sends security alerts to a separate chat, so they don't get lost among sales notifications. |
+
+### Added: sales and billing notifications
+
+| Notification | Source |
+| --- | --- |
+| **New order:** order number, client, item count, total in the client's currency, payment method | `AfterShoppingCartCheckout` |
+| **Invoice refunded** | `InvoiceRefunded` |
+| **Cancellation request:** service, type and reason | `CancellationRequest` |
+
+### Added: operations notifications
+
+| Notification | Source | Why |
+| --- | --- | --- |
+| **Provisioning failure:** create, suspend, unsuspend, terminate or package change, with the module error | `AfterModule*Failed` hooks | These fail silently and are usually noticed only when a client complains. |
+| **Domain failure:** registration, renewal or transfer, with the registrar error | `AfterRegistrar*Failed`, `DomainTransferFailed` | A failed renewal can let a client's domain expire. |
+
+### Changed
+
+- Messages are built by one shared formatter (`telegram_notifications_format`) that escapes every value, so new notification types can't skip escaping by mistake.
+- Free-text fields from clients and modules (cancellation reasons, error messages) are capped at 300 characters.
+- Amounts in new notifications are shown in the client's currency.
+- Module constants use guarded `define()`, so including the module file twice no longer raises "constant already defined" warnings.
+
+### Security
+
+- Malformed CIDR prefixes in **Trusted Admin IPs** (for example `1.2.3.4/abc`) and `/0` ranges are ignored. Otherwise a typo could have trusted every IP address and silenced all admin login alerts.
+
+### Testing
+
+- Message building, HTML escaping, truncation, ticket filters and IPv4/IPv6 CIDR matching were tested on PHP 8.2 and 8.3, with all error reporting on.
+- The hooks need a live WHMCS install and have not been tested end-to-end. Please report any issue on GitHub.
+
 ## [2.0.0] - 2026-10-18
 
 First release of this maintained fork. The code was audited against WHMCS 9 (PHP 8.2+) and for security and data-leak risks. Every change below lists **what** changed and **why**.
