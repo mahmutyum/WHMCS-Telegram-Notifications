@@ -1,0 +1,39 @@
+{
+    "schema": "1.0",
+    "type": "whmcs-addons",
+    "name": "telegram_notifications",
+    "license": "MIT",
+    "category": "notifications",
+    "description": {
+        "name": "Telegram Notifications",
+        "tagline": "Secure, real-time Telegram notifications for WHMCS events.",
+        "long": "Telegram Notifications sends real-time alerts to a Telegram chat, group or channel when clients register, invoices are paid and support tickets are opened or replied to. Version 2 is hardened for WHMCS 9 and PHP 8.2+: client input is escaped, sensitive ticket content is opt-in, link previews are disabled and Telegram outages can never block checkout or payment callbacks.",
+        "features": [
+            "Notifications for new client registrations.",
+            "Notifications when an invoice is paid.",
+            "Notifications when a support ticket is opened (including guest tickets).",
+            "Notifications when a client replies to a support ticket, with optional reply preview.",
+            "HTML-escaped messages that block link and markup injection.",
+            "Non-blocking delivery with strict timeouts and error isolation.",
+            "Built-in log viewer showing delivery status for each notification.",
+            "Supports custom admin folder names."
+        ]
+    },
+    "logo": {
+        "filename": "logo.png"
+    },
+    "support": {
+        "homepage": "https:\/\/github.com\/mahmutyum\/WHMCS-Telegram-Notifications",
+        "docs_url": "https:\/\/github.com\/mahmutyum\/WHMCS-Telegram-Notifications#readme"
+    },
+    "authors": [
+        {
+            "name": "Mahmut YUM",
+            "homepage": "https:\/\/www.mahmutyum.com.tr\/"
+        },
+        {
+            "name": "Nikba Creative Studio (original author)",
+            "homepage": "https:\/\/www.nikba.com\/"
+        }
+    ]
+}
